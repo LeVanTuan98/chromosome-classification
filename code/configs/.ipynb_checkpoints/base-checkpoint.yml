@@ -1,0 +1,64 @@
+name: "chromosome_classification"        # name of this experiment. Used for comet-ml too
+gpu_id: "0"                     # must set as a string, empty means using CPU
+seed: 50
+
+model_params:       # params for generating the
+  in_channels: 1
+  backbone: 'densenet121' 
+  pretrained: true
+  pretrained_file: ''
+  bb_freeze: false
+  labels: [ 0,  1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23]
+  num_labels: 24
+  conv_fc: true
+  fc_bn: true
+  norm_type: 'BatchNorm'
+  global_pool: 'AVG'
+  mish: false
+  attention_map: None
+  embedded_gcn: false
+  wildcat: false
+  use_se: false
+  fc_drop: 0.0
+  lse_gamma: 10.0
+  lamb: 1
+#  params for preprocessing the input image
+  imagenet: true
+  n_crops: 0
+  augmix: false
+  softmax: false
+
+train_params:
+  root_dir: 'data'
+  csv_files: 
+      train: 'data/train.csv' 
+      valid: 'data/valid.csv'
+  csv_columns: ['image_dir', 'label']
+  label_list: 
+  input_shape: [175, 135]
+  crop_size: 'auto'
+  scale_intensity: [0, 1]
+  n_incremental: 0
+  n_cutoff_imgs: ''
+  train_batch_size: 128 #768
+  infer_batch_size: 1
+  initial_epoch: 0
+  n_epochs: 200
+  num_workers_to_cache: 8
+  num_workers_from_cache: 4
+  early_stop: 20
+  threshold: 0.5    # threshold value for binary classification
+  lr_scheduler: 'step'
+  data_augment: True
+  prob_augment: 0.3
+  range_value: 10.0
+  resize_mode: 'adapt'
+  num_random: 1
+  
+optimizer:
+  type: Adam
+  args:
+    lr: 0.0001
+
+loss: CrossEntropyLoss
+
